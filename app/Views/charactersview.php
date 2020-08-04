@@ -1,7 +1,7 @@
-<html>
+<?php $id = 1; ?>
 <?php foreach ($characters as $character) : ?>
-
-<li><?= $character->name ?></li>
-
+<?php
+   echo"<p class='character' id='character".$id."'> ".$character->name." </p>";
+   $id++;
+?>
 <?php endforeach ?>
-</html>

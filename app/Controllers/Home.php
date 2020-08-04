@@ -9,6 +9,11 @@ class Home extends BaseController
 		$data['characters'] = $model->getStarWarsCharacters($index);
 		$data['page'] = $index;
 		echo view('charactersview', $data);
+	}
+
+	public function main()
+	{
+		$data['page'] = 1;
 		echo view('navbar', $data);
 	}
 }

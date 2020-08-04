@@ -30,7 +30,7 @@ $routes->setAutoRoute(true);
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::view');
+$routes->get('/', 'Home::main');
 $routes->add('home/view/(:num)', 'Home::view/$1', ['as' => 'view_page']);
 $routes->addRedirect('view/', 'home/view/');
 

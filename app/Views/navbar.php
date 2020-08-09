@@ -14,6 +14,28 @@
     {
         var pageNumber = <?= $page ?>;
         var itemsSelected = [];
+        var isItemSelected = false;
+        function addOptionToList(elementClicked)
+        {
+            if (itemsSelected.length < 3)
+             {
+                elementClicked.removeClass("panel-primary");
+                elementClicked.addClass("panel-success");
+                elementClicked.find(".panel-footer").text("Selected");
+              itemsSelected.push
+              (
+                {
+                    name: elementClicked.find("#characterName").text(),
+                    url: elementClicked.find("#characterUrl").attr("href"),
+                }
+               );
+               document.cookie="items="+JSON.stringify(itemsSelected);
+             }
+               else
+                {
+                  alert("You can only select 3 items.");
+                }
+        }
         document.cookie="items="+JSON.stringify(itemsSelected);
 		jQuery("#characterBox").load("/home/view/" + pageNumber);
 	    jQuery("#prev").click(function()
@@ -37,29 +59,37 @@
 	    });
         jQuery("body").on("click", "div.characterBox", function()
         {
-            if (itemsSelected.length < 3)
+            if (itemsSelected.length >= 1)
             {
-            jQuery(this).removeClass("panel-primary");
-            jQuery(this).addClass("panel-success");
-            jQuery(this).find(".panel-footer").text("Selected");
-            itemsSelected.push(
+                for(var i = 0; i<itemsSelected.length; i++)
                 {
-                    name: jQuery(this).find("#characterName").text(),
-                    url: jQuery(this).find("#characterUrl").attr("href"),
+                    if(itemsSelected[i].name == jQuery(this).find("#characterName").text()
+                    && itemsSelected[i].url == jQuery(this).find("#characterUrl").attr("href"))
+                        {
+                          isItemSelected=true;
+                        }
                 }
-            );
-            document.cookie="items="+JSON.stringify(itemsSelected);
+                if (!isItemSelected)
+                {
+                    addOptionToList(jQuery(this));
+                }
+                else
+                {
+                    alert("You have already selected this option.");
+                }
             }
-            else
+            else // no options selected no need for checks
             {
-                alert("You can only select 3 items.");
+                addOptionToList(jQuery(this));
             }
+            // reset the flag so it doesn't interefere with future interactions
+            isItemSelected = false;
         });
 	});
 </script>
 </head>
 <body>
-<div id="characterBox">
+<div id="characterBox" class="container">
 </div>
 <nav class ="navbar navbar-default">
 <ul class="pager">

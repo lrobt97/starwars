@@ -5,7 +5,6 @@
    {
 	   $items = json_decode($_COOKIE['items']);
    }
-   echo "<div class='container'>";
 ?>
 <?php foreach ($characters as $character) : ?>
 <?php
@@ -17,6 +16,7 @@
 
    // if the character is saved in the cookie, load a different HTML format
    $isSelected=false;
+   $isFirstRow = true;
    foreach($items as $item)
    {
 	   if($item->name == $character->name)
@@ -41,13 +41,14 @@
  	echo "</div>";
    }
 
-   if ($id % 3 ==1)
+   if ($id % 3 ==1 && !$isFirstRow)
    {
 		echo "</div>";
+   }
+   // ensures the first row won't be closed prematurely since $id % 3 = 1 for $id = 1
+   else if ($isFirstRow){
+	   $isFirstRow = true;
    }
    $id++;
 ?>
 <?php endforeach ?>
-<?php 
-	echo "</div>";
-?>

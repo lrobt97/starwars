@@ -15,38 +15,39 @@
         var pageNumber = <?= $page ?>;
         var itemsSelected = [];
         var isItemSelected = false;
-        var itemSelectedCount=0;
         function addOptionToList(elementClicked)
         {
-            if (itemsSelected.length < 3)
-             {
-                elementClicked.removeClass("panel-primary");
-                elementClicked.addClass("panel-success");
-                elementClicked.find(".panel-footer").text("Selected");
-              itemsSelected.push
-              (
+            var threeItemsSelected = true;
+            for (var i = 0; i<=2 ; i++)
+            {
+                if (!itemsSelected[i] || jQuery.isEmptyObject(itemsSelected[i]))
                 {
+                  elementClicked.removeClass("panel-primary");
+                  elementClicked.addClass("panel-success");
+                  elementClicked.find(".panel-footer").text("Selected");
+                  itemsSelected[i]={
                     name: elementClicked.find("#characterName").text(),
                     url: elementClicked.find("#characterUrl").attr("href"),
+                  };
+                  document.cookie="items="+JSON.stringify(itemsSelected);
+                  debugger;
+                  jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": "+ itemsSelected[i].name);
+                  threeItemsSelected = false;
+                  break;
                 }
-               );
-               document.cookie="items="+JSON.stringify(itemsSelected);
-               itemSelectedCount++;
-               jQuery("#selectedCharacter" + itemSelectedCount).text("Option " + itemSelectedCount +": "+ itemsSelected[itemSelectedCount-1].name);
-             }
-               else
-                {
-                  alert("You can only select 3 items.");
-                }
+            }       
+            if (threeItemsSelected)
+            {
+                alert("You can only select 3 items.");
+            } 
         }
-        document.cookie="items="+JSON.stringify(itemsSelected);
-		jQuery("#characterBox").load("/home/view/" + pageNumber);
-	    jQuery("#prev").click(function()
-	    {
+		    jQuery("#characterBox").load("/home/view/" + pageNumber);
+	      jQuery("#prev").click(function()
+	      {
           if (pageNumber > 1)
           {
             pageNumber--;
-		    jQuery("#characterBox").load("/home/view/" + pageNumber);
+		        jQuery("#characterBox").load("/home/view/" + pageNumber);
             jQuery("#pageCount").text("Page " + pageNumber);
           }
           else
@@ -67,12 +68,29 @@
         });
         jQuery("#download").click(function()
 	    {
-            window.location="/home/download/";
+            debugger;
+            var threeOptionsSelected = true;
+            for (var i =0; i<=2; i++)
+            {
+               if (!itemsSelected[i] || jQuery.isEmptyObject(itemsSelected[i]))
+               {
+                 threeOptionsSelected = false;
+                 break;
+               }
+            }
+            if (threeOptionsSelected)
+            {
+                window.location="/home/download/";
+            }
+            else
+            {
+                alert("Three items must be selected before downloading.");
+            }
         });
-	    jQuery("#next").click(function()
+	      jQuery("#next").click(function()
 	    {
             pageNumber ++;
-		    jQuery("#characterBox").load("/home/view/" + pageNumber);
+		        jQuery("#characterBox").load("/home/view/" + pageNumber);
             jQuery("#pageCount").text("Page " + pageNumber);
 	    });
         jQuery("body").on("click", "div.characterBox", function()
@@ -84,16 +102,20 @@
                     if(itemsSelected[i].name == jQuery(this).find("#characterName").text()
                     && itemsSelected[i].url == jQuery(this).find("#characterUrl").attr("href"))
                         {
+                          itemsSelected[i] ={
+                          };
+                          jQuery(this).removeClass("panel-success");
+                          jQuery(this).addClass("panel-primary");
+                          jQuery(this).find(".panel-footer").text("Unselected");
+                          jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": None");
+                          document.cookie="items="+JSON.stringify(itemsSelected);
                           isItemSelected=true;
+                          break;
                         }
                 }
                 if (!isItemSelected)
                 {
                     addOptionToList(jQuery(this));
-                }
-                else
-                {
-                    alert("You have already selected this option.");
                 }
             }
             else // no options selected no need for checks

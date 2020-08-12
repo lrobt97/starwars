@@ -16,7 +16,7 @@ class Home extends BaseController
 	public function main()
 	{
 		$data['page'] = 1;
-		echo view('navbar', $data);
+		echo view('main', $data);
 	//	$this->cachePage(60);
 	}
 

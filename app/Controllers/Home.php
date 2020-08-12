@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 use App\Models\StarwarsModel;
+use App\Models\FileDownloadModel;
 
 class Home extends BaseController
 {
@@ -17,5 +18,14 @@ class Home extends BaseController
 		$data['page'] = 1;
 		echo view('navbar', $data);
 	//	$this->cachePage(60);
+	}
+
+	public function download()
+	{
+		$download = new FileDownloadModel();
+		$data['info'] = $download->getRequestedData();
+		$name ="characters".date('Y-m-dHis').".csv";
+		$download->downloadAsCsv($name);
+		//echo view('download', $data);
 	}
 }

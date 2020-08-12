@@ -15,6 +15,7 @@
         var pageNumber = <?= $page ?>;
         var itemsSelected = [];
         var isItemSelected = false;
+        var itemSelectedCount=0;
         function addOptionToList(elementClicked)
         {
             if (itemsSelected.length < 3)
@@ -30,6 +31,8 @@
                 }
                );
                document.cookie="items="+JSON.stringify(itemsSelected);
+               itemSelectedCount++;
+               jQuery("#selectedCharacter" + itemSelectedCount).text("Option " + itemSelectedCount +": "+ itemsSelected[itemSelectedCount-1].name);
              }
                else
                 {
@@ -51,6 +54,21 @@
             alert("You are already on the first page.");
           }
 	    });
+        jQuery("#reset").click(function()
+	    {
+            itemSelectedCount=0;
+            itemsSelected = [];
+            document.cookie="items="+JSON.stringify(itemsSelected);
+            for(var i = 1; i<=3; i++)
+            {
+                jQuery("#selectedCharacter"+ i).text("Option "+i+": None");
+            }
+            jQuery("#characterBox").load("/home/view/" + pageNumber);
+        });
+        jQuery("#download").click(function()
+	    {
+            window.location="/home/download/";
+        });
 	    jQuery("#next").click(function()
 	    {
             pageNumber ++;
@@ -89,6 +107,19 @@
 </script>
 </head>
 <body>
+<div class="container">
+  <div class="page-header">
+    <h1>Star Wars App</h1>      
+  </div>
+  <p>Please select 3 characters. So far you have selected:</p>      
+  <p id="selectedCharacter1">Option 1: None</p>      
+  <p id="selectedCharacter2">Option 2: None</p>      
+  <p id="selectedCharacter3">Option 3: None</p>      
+<div class = "btn-group">
+<button class="btn-success" id="download">Download CSV</button>
+<button class="btn-danger" id="reset">Reset options</button>
+</div>
+</div>
 <div id="characterBox" class="container">
 </div>
 <nav class ="navbar navbar-default">

@@ -30,7 +30,6 @@
                     url: elementClicked.find("#characterUrl").attr("href"),
                   };
                   document.cookie="items="+JSON.stringify(itemsSelected);
-                  debugger;
                   jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": "+ itemsSelected[i].name);
                   threeItemsSelected = false;
                   break;
@@ -68,7 +67,6 @@
         });
         jQuery("#download").click(function()
 	    {
-            debugger;
             var threeOptionsSelected = true;
             for (var i =0; i<=2; i++)
             {

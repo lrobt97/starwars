@@ -9,11 +9,44 @@
   </script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 <script>
+  // Original JavaScript code by Chirp Internet: www.chirp.com.au (cookies)
+  function getCookie(name)
+  {
+    var re = new RegExp(name + "=([^;]+)");
+    var value = re.exec(document.cookie);
+    return (value != null) ? unescape(value[1]) : null;
+  }
+  function setCookie(name, value)
+  {
+    var today = new Date();
+    var expiry = new Date(today.getTime() + 30 * 86400 * 1000); // plus 30 days
+    document.cookie = name + "=" + value + "; expires=" + expiry.toGMTString() + "; path=/";
+  }
+  function deleteCookie(name)
+  {
+    var today = new Date();
+    // set the expiry in the past so the cookie gets deleted
+    document.cookie = name + "=[]; expires="+ new Date(today.getTime() -1) + "; path=/";
+  }
+
 	jQuery.noConflict();
 	jQuery(document).ready(function()
     {
         var pageNumber = <?= $page ?>;
+        var maxPages = <?= $pagecount ?>;
         var itemsSelected = [];
+        // check if the cookie has already been set and load the page
+        if (getCookie("items"))
+        {
+          itemsSelected = JSON.parse(getCookie("items"));
+          for (var i = 0; i<=2; i++)
+          {
+            if (!jQuery.isEmptyObject(itemsSelected[i]))
+            {
+              jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": "+ itemsSelected[i].name);
+            }
+          }
+        }
         var isItemSelected = false;
         function addOptionToList(elementClicked)
         {
@@ -29,7 +62,7 @@
                     name: elementClicked.find("#characterName").text(),
                     url: elementClicked.find("#characterUrl").attr("href"),
                   };
-                  document.cookie="items="+JSON.stringify(itemsSelected);
+                  setCookie("items", JSON.stringify(itemsSelected));
                   jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": "+ itemsSelected[i].name);
                   threeItemsSelected = false;
                   break;
@@ -58,7 +91,7 @@
 	    {
             itemSelectedCount=0;
             itemsSelected = [];
-            document.cookie="items="+JSON.stringify(itemsSelected);
+            deleteCookie("items")
             for(var i = 1; i<=3; i++)
             {
                 jQuery("#selectedCharacter"+ i).text("Option "+i+": None");
@@ -87,9 +120,16 @@
         });
 	      jQuery("#next").click(function()
 	    {
+            if (pageNumber + 1 <= maxPages)
+            {
             pageNumber ++;
 		        jQuery("#characterBox").load("/home/view/" + pageNumber);
             jQuery("#pageCount").text("Page " + pageNumber);
+            }
+            else 
+            {
+              alert("No more information available");
+            }
 	    });
         jQuery("body").on("click", "div.characterBox", function()
         {
@@ -106,7 +146,7 @@
                           jQuery(this).addClass("panel-primary");
                           jQuery(this).find(".panel-footer").text("Unselected");
                           jQuery("#selectedCharacter" + (i + 1)).text("Option " + (i + 1) +": None");
-                          document.cookie="items="+JSON.stringify(itemsSelected);
+                          setCookie("items", JSON.stringify(itemsSelected));
                           isItemSelected=true;
                           break;
                         }

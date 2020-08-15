@@ -10,22 +10,22 @@ class Home extends BaseController
 		$data['characters'] = $model->getStarWarsCharacters($index);
 		$data['page'] = $index;
 		echo view('charactersview', $data);
-	//	$this->cachePage(60);
 	}
 
 	public function main()
 	{
+		$model = new StarwarsModel();
+		$model->initialiseSessionData();
+		$data['pagecount'] = $model->getNumberOfPages();
 		$data['page'] = 1;
 		echo view('main', $data);
-	//	$this->cachePage(60);
 	}
 
 	public function download()
 	{
 		$download = new FileDownloadModel();
 		$data['info'] = $download->getRequestedData();
-		$name ="characters".date('Y-m-dHis').".csv";
+		$name ="characters".date('YmdHis').".csv";
 		$download->downloadAsCsv($name);
-		//echo view('download', $data);
 	}
 }

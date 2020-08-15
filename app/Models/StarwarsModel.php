@@ -6,12 +6,23 @@ use SWAPI\SWAPI;
 session_start();
 class StarwarsModel extends Model
 {
-    public function getStarWarsCharacters($index)
+    public function getNumberOfPages()
+    {
+        if(!isset($_SESSION['characterData']))
+        {
+            return 1;
+        }
+        else
+        {
+            return ceil(count($_SESSION['characterData'])/9);
+        }
+    }
+
+    public function initialiseSessionData()
     {
         $swapi = new SWAPI;
         // initialise array to read API
         $charDataArray = array();
-
         // Get all characters from API and store in the session data
         if(!isset($_SESSION['characterData']))
         {
@@ -30,6 +41,11 @@ class StarwarsModel extends Model
             } while ($characters->hasNext());
             $_SESSION['characterData']=$charDataArray;
         }
+    }
+
+    public function getStarWarsCharacters($index)
+    {
+        $this->initialiseSessionData();
         // initialise return data array
         $charArray = array();
         // iterate between the multiples of 9 corresponding to $index

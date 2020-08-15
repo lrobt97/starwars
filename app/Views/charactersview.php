@@ -1,7 +1,7 @@
 <?php 
    $id = 1; 
-   $items;
-   if(!is_null($_COOKIE['items']))
+   $items = array();
+   if(isset($_COOKIE['items']))
    {
 	   $items = json_decode($_COOKIE['items']);
    }
@@ -17,18 +17,21 @@
    // if the character is saved in the cookie, load a different HTML format
    $isSelected=false;
    $isFirstRow = true;
-   foreach($items as $item)
+   if(isset($_COOKIE['items']))
    {
-	   if($item->name == $character->name)
-	   {
-   		echo "<div class='characterBox panel panel-success'>";
-   		echo "<div class='panel-heading' id = 'characterName'>".$character->name."</div>";
-   		echo "<div class='panel-body'><a id = 'characterUrl' href='".$character->url."'>SWAPI Information</a></div>";
-   		echo "<div class='panel-footer'>Selected</div>";
-   		echo "</div>";
-		echo "</div>";
-		$isSelected = true;
-	   }
+      foreach($items as $item)
+      {
+	      if($item->name == $character->name)
+	      {
+   		   echo "<div class='characterBox panel panel-success'>";
+   		   echo "<div class='panel-heading' id = 'characterName'>".$character->name."</div>";
+   		   echo "<div class='panel-body'><a id = 'characterUrl' href='".$character->url."'>SWAPI Information</a></div>";
+   		   echo "<div class='panel-footer'>Selected</div>";
+   		   echo "</div>";
+		      echo "</div>";
+		      $isSelected = true;
+	      }
+      }
    }
 
    if(!$isSelected)

@@ -74,6 +74,18 @@
             } 
         }
 		    jQuery("#characterBox").load("/home/view/" + pageNumber);
+        jQuery("#first").click(function()
+        {
+          pageNumber = 1;
+          jQuery("#characterBox").load("/home/view/1");
+          jQuery("#pageCount").text("Page 1");
+        });
+        jQuery("#last").click(function()
+        {
+          pageNumber = maxPages;
+          jQuery("#characterBox").load("/home/view/" + maxPages);
+          jQuery("#pageCount").text("Page " + maxPages);
+        });
 	      jQuery("#prev").click(function()
 	      {
           if (pageNumber > 1)
@@ -171,7 +183,9 @@
   <div class="page-header">
     <h1>Star Wars App</h1>      
   </div>
-  <p>Please select 3 characters. So far you have selected:</p>      
+  <p>Please select 3 characters by clicking on the relevant boxes. Links 
+   are available to view more information and this can be downloaded as a CSV. You can also deselect a character
+   by clicking on their box again. So far you have selected:</p>      
   <p id="selectedCharacter1">Option 1: None</p>      
   <p id="selectedCharacter2">Option 2: None</p>      
   <p id="selectedCharacter3">Option 3: None</p>      
@@ -183,10 +197,12 @@
 <div id="characterBox" class="container">
 </div>
 <nav class ="navbar navbar-default">
-<ul class="pager">
-<li class ='previous'><button id="prev" class="btn btn-primary">Previous page</button></li>
-<li class='active'><p id="pageCount">Page 1</p></li>
-<li class ='next'><button id="next" class="btn btn-primary">Next page</button></li>
+<div class="pager">
+<li><button id="first" class="btn btn-primary">First page</button></li>
+<li><button id="prev" class="btn btn-primary">Previous page</button></li>
+<li><button id="next" class="btn btn-primary">Next page</button></li>
+<li><button id="last" class="btn btn-primary">Last page</button></li>
+<li><p id="pageCount">Page 1</p></li>
 </ul>
 </nav>
 </body>

@@ -1,7 +1,7 @@
 <?php 
    $id = 1; 
    $items = array();
-   if(isset($_COOKIE['items']))
+   if(isset($_COOKIE['items']) && !empty($_COOKIE['items']))
    {
 	   $items = json_decode($_COOKIE['items']);
    }
@@ -17,7 +17,7 @@
    // if the character is saved in the cookie, load a different HTML format
    $isSelected=false;
    $isFirstRow = true;
-   if(isset($_COOKIE['items']))
+   if(isset($_COOKIE['items']) && is_object($items))
    {
       foreach($items as $item)
       {
